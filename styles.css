@@ -9,6 +9,16 @@ body > div {
 .navy {
     background-color: rgb(52, 127, 189);
     height: 150px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+.actual-result {
+    width: 80%;
+}
+#search, #searchBtn {
+    height: 20px;
+    align-self: center;
 }
 .main {
     height: 380px;
