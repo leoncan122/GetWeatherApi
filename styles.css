@@ -14,8 +14,26 @@ body > div {
     justify-content: space-around;
 }
 .actual-result {
+    display: flex;
+    flex-direction: row;
     width: 80%;
 }
+
+#show-result {
+    list-style: none;
+    font-weight: 800;
+    font-size: 1.2em;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 90%;
+    align-items: flex-end;
+}
+#show-result > p {
+    height: fit-content;
+    margin-inline-end: auto;
+}
+
 #search, #searchBtn {
     height: 20px;
     align-self: center;

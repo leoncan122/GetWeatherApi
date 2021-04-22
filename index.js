@@ -4,8 +4,19 @@ const searchBtn = document.getElementById('searchBtn');
 const inputSearch = document.getElementById('search');
 
 //contenido
-const actualResult = document.getElementById('actual-result');
-const saveResults = document.getElementById('results');
+var resultIcon = document.getElementById('temp-icon')
+
+var characteristicsUl = document.getElementById('show-result');
+var saveResults = document.querySelector('.results');
+var resultField = document.querySelector('.actual-result');
+
+var temperature = document.getElementById('temp')
+var cityName = document.getElementById('city-name')
+var feelsLike = document.getElementById('feels-like')
+var date = document.getElementById('date')
+var sunset = document.getElementById('sunset')
+var humidity = document.getElementById('humidity')
+var description = document.getElementById('description')
 
 //funciones
 function get(url) {
@@ -17,8 +28,6 @@ const apiKey = "4fa351655b4244afa0ede32f61fa9e0c";
 const basePath = `https://api.weatherbit.io/`;
 const baseUrl = new URL (`v2.0/current`, basePath);
 
-
-console.log(baseUrl)
 //renderizar mapa
 
 //poner mark
@@ -37,5 +46,19 @@ searchBtn.addEventListener('click', (event) => {
     .then(response => response.json())
     .then( data => {
         console.log(data)
+        let result = data.data[0]
+        temperature.textContent = `${result.temp}c`
+        temperature.style.fontSize = '40px'
+        temperature.style.fontWeight = 'bold'
+        cityName.textContent = result.city_name
+        feelsLike.textContent = `Feels like: ${result.app_temp}`
+        date.textContent = result.datetime
+        sunset.textContent = `Sunset at: ${result.sunset}`
+        humidity.textContent = `Humidity: ${result.rh}`
+        description.textContent = result.weather.description
+
+        let icon = result.weather.icon
+        resultIcon.src = `https://www.weatherbit.io/static/img/icons/${icon}.png`
+        
     })
 })
