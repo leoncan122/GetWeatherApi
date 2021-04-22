@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./styles.css">
     <title>Document</title>
+    <script src='https://api.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.css' rel='stylesheet'>
 </head>
 <body>
     <div class="navy">
@@ -32,12 +34,17 @@
             <p></p>
         </div>
 
-        <div class="content">contenido
+        <div class="content">
             
-            <div class="results">
+            <div class="map-controls">
+                <button id="marker">Add a marker</button>
             </div>
             
-            <div class="map"></div>
+            
+            <div id='map' style='width: 400px; height: 300px;'></div>
+            <script src='./index.js'></script>
+
+            
             
         </div>
     

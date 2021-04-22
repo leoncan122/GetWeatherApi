@@ -1,7 +1,9 @@
 //buttons
 const searchBtn = document.getElementById('searchBtn');
+const markerBtn = document.getElementById('marker');
 //input
 const inputSearch = document.getElementById('search');
+const inputMap = document.getElementById('map');
 
 //contenido
 var resultIcon = document.getElementById('temp-icon')
@@ -78,4 +80,32 @@ searchBtn.addEventListener('click', (event) => {
         savedTemp.textContent = savedResults[0]
         savedCity.textContent = savedResults[1]
     })
+})
+
+//mapa
+mapboxgl.accessToken = 'pk.eyJ1IjoibGVvbmNhbjEyMiIsImEiOiJja250NDVubm8yajJwMm5wcjIyNXc1Yjl2In0.5IuZ1DxL3JD8IfDAs5Jrjw';
+
+var map = new mapboxgl.Map({
+    container: 'map', // container ID
+    style: 'mapbox://styles/mapbox/streets-v11', // style URL
+    center: [-5.6704, 40.9726], // starting position [lng, lat]
+    zoom: 9, // starting zoom
+    
+});
+
+
+markerBtn.addEventListener('click', (event) => {
+    event.preventDefault();
+    
+    map.doubleClickZoom.disable();
+
+     inputMap.addEventListener('dblclick', () => {
+         
+        var marker = new mapboxgl.Marker({
+            color: "#FF0000",
+            draggable: true
+            })
+            .setLngLat([-5.6704, 40.9726])
+            .addTo(map);
+     })
 })
