@@ -43,9 +43,12 @@ body > div {
     display: flex;
     flex-direction: row;
 }
-.left-side {
+.last-results {
+    display: flex;
+    flex-direction: column;
     width: 20%;
     background-color: rgb(52, 127, 189);
+    overflow: scroll;
 }
 .content {
     width: 80%;

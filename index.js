@@ -7,7 +7,7 @@ const inputSearch = document.getElementById('search');
 var resultIcon = document.getElementById('temp-icon')
 
 var characteristicsUl = document.getElementById('show-result');
-var saveResults = document.querySelector('.results');
+var savedResultsField = document.querySelector('.last-results > p');
 var resultField = document.querySelector('.actual-result');
 
 var temperature = document.getElementById('temp')
@@ -60,5 +60,22 @@ searchBtn.addEventListener('click', (event) => {
         let icon = result.weather.icon
         resultIcon.src = `https://www.weatherbit.io/static/img/icons/${icon}.png`
         
+        return [result.temp, result.city_name, result.weather.icon]
+    })
+    .then ( savedResults => {
+        let savedTempIcon = document.createElement('img')
+        let savedTemp = document.createElement('p')
+        let savedCity = document.createElement('p')
+
+        savedResultsField.appendChild(savedTempIcon)
+        savedResultsField.appendChild(savedTemp)
+        savedResultsField.appendChild(savedCity)
+        savedResultsField.style.display = 'flex'
+        savedResultsField.style.flexDirection = 'column'
+        savedResultsField.style.alignItems = 'center'
+
+        savedTempIcon.src = savedResults[2]
+        savedTemp.textContent = savedResults[0]
+        savedCity.textContent = savedResults[1]
     })
 })
