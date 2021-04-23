@@ -98,14 +98,28 @@ markerBtn.addEventListener('click', (event) => {
     event.preventDefault();
     
     map.doubleClickZoom.disable();
+    //traer el long-lat del punto central del mapa
+    //var center = map.getCenter();
+    //var center = map.getFreeCameraOptions();
+    //console.log(center.position.x)
+    //var centerPosition = [center.position.x,center.position.y, center.position.z]
 
+    //var coord = new mapboxgl.MercatorCoordinate(centerPosition[0], centerPosition[1], centerPosition[2]);
+    //console.log(coord)
+    //var toLatLong = coord.toLngLat()
+    
      inputMap.addEventListener('dblclick', () => {
-         
+        var center = map.getFreeCameraOptions();
+        var centerPosition = [center.position.x,center.position.y, center.position.z]
+        var md = new mapboxgl.MercatorCoordinate(centerPosition[0], centerPosition[1], centerPosition[2]);
+        var position = md.toLngLat() 
+        console.log(position)
+
         var marker = new mapboxgl.Marker({
             color: "#FF0000",
             draggable: true
             })
-            .setLngLat([-5.6704, 40.9726])
+            .setLngLat(position)
             .addTo(map);
      })
 })
