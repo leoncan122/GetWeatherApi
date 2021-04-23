@@ -45,7 +45,7 @@ body > div {
 }
 .last-results {
     display: flex;
-    flex-direction: column;
+    flex-direction: column-reverse;
     width: 20%;
     background-color: rgb(52, 127, 189);
     overflow: scroll;

@@ -12,6 +12,7 @@ var characteristicsUl = document.getElementById('show-result');
 var savedResultsField = document.querySelector('.last-results > p');
 var resultField = document.querySelector('.actual-result');
 
+//imprimiendo resultados
 var temperature = document.getElementById('temp')
 var cityName = document.getElementById('city-name')
 var feelsLike = document.getElementById('feels-like')
@@ -26,7 +27,7 @@ function get(url) {
 }
 //key
 const apiKey = "4fa351655b4244afa0ede32f61fa9e0c";
-//basePath
+//baseURL
 const basePath = `https://api.weatherbit.io/`;
 const baseUrl = new URL (`v2.0/current`, basePath);
 
@@ -45,9 +46,11 @@ searchBtn.addEventListener('click', (event) => {
     baseUrl.searchParams.set('city', city)
 
     get(baseUrl)
-    .then(response => response.json())
+    .then(response => {
+        console.log(response)
+        return response.json()
+    })
     .then( data => {
-        console.log(data)
         let result = data.data[0]
         temperature.textContent = `${result.temp}c`
         temperature.style.fontSize = '40px'
@@ -62,7 +65,7 @@ searchBtn.addEventListener('click', (event) => {
         let icon = result.weather.icon
         resultIcon.src = `https://www.weatherbit.io/static/img/icons/${icon}.png`
         
-        return [result.temp, result.city_name, result.weather.icon]
+        return [result.temp, result.city_name, resultIcon.src]
     })
     .then ( savedResults => {
         let savedTempIcon = document.createElement('img')
@@ -73,10 +76,14 @@ searchBtn.addEventListener('click', (event) => {
         savedResultsField.appendChild(savedTemp)
         savedResultsField.appendChild(savedCity)
         savedResultsField.style.display = 'flex'
+        savedResultsField.style.height = '80px'
         savedResultsField.style.flexDirection = 'column'
         savedResultsField.style.alignItems = 'center'
+        savedTemp.style.margin = '0'
+        savedCity.style.margin = '0'
 
-        savedTempIcon.src = savedResults[2]
+        savedTempIcon.src = resultIcon.src
+        savedTempIcon.style.width = '35px'
         savedTemp.textContent = savedResults[0]
         savedCity.textContent = savedResults[1]
     })
@@ -92,33 +99,62 @@ var map = new mapboxgl.Map({
     zoom: 9, // starting zoom
     
 });
+//creando marcador en el mapa
 map.on('click', (e) => {
-    
+
     var marker = new mapboxgl.Marker({
         color: "#FF0000",
         draggable: true
+    })
+    .setLngLat(e.lngLat)
+    .addTo(map);
+    
+    baseUrl.searchParams.set('key', apiKey);
+    baseUrl.searchParams.set('lon', e.lngLat.lng)
+    baseUrl.searchParams.set('lat', e.lngLat.lat)
+
+    markerBtn.addEventListener('click', () => {
+
+        get(baseUrl)
+        .then(response => response.json())
+        .then( data => {
+            console.log(data)
+            let result = data.data[0]
+            temperature.textContent = `${result.temp}c`
+            temperature.style.fontSize = '40px'
+            temperature.style.fontWeight = 'bold'
+            cityName.textContent = result.city_name
+            feelsLike.textContent = `Feels like: ${result.app_temp}`
+            date.textContent = result.datetime
+            sunset.textContent = `Sunset at: ${result.sunset}`
+            humidity.textContent = `Humidity: ${result.rh}`
+            description.textContent = result.weather.description
+        
+            let icon = result.weather.icon
+            resultIcon.src = `https://www.weatherbit.io/static/img/icons/${icon}.png`
+                    
+            return [result.temp, result.city_name, result.weather.icon]
         })
-        .setLngLat(e.lngLat)
-        .addTo(map);
-    });
-
-
-// markerBtn.addEventListener('click', (event) => {
-//     event.preventDefault();
+        .then ( savedResults => {
+            let savedTempIcon = document.createElement('img')
+            let savedTemp = document.createElement('p')
+            let savedCity = document.createElement('p')
     
+            savedResultsField.appendChild(savedTempIcon)
+            savedResultsField.appendChild(savedTemp)
+            savedResultsField.appendChild(savedCity)
+            savedResultsField.style.display = 'flex'
+            savedResultsField.style.height = '80px'
+            savedResultsField.style.flexDirection = 'column'
+            savedResultsField.style.alignItems = 'center'
+            savedTemp.style.margin = '0'
+            savedCity.style.margin = '0'
     
-//      inputMap.addEventListener('dblclick', () => {
-//         var center = map.getFreeCameraOptions();
-//         var centerPosition = [center.position.x,center.position.y, center.position.z]
-//         var md = new mapboxgl.MercatorCoordinate(centerPosition[0], centerPosition[1], centerPosition[2]);
-//         var position = md.toLngLat() 
-//         console.log(position)
+            savedTempIcon.src = resultIcon.src
+            savedTempIcon.style.width = '35px'
+            savedTemp.textContent = savedResults[0]
+            savedCity.textContent = savedResults[1]
+        })
+    })
+})
 
-//         var marker = new mapboxgl.Marker({
-//             color: "#FF0000",
-//             draggable: true
-//             })
-//             .setLngLat(position)
-//             .addTo(map);
-//      })
-// })
