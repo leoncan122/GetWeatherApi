@@ -31,13 +31,14 @@ const apiKey = "4fa351655b4244afa0ede32f61fa9e0c";
 const basePath = `https://api.weatherbit.io/`;
 const baseUrl = new URL (`v2.0/current`, basePath);
 
-
-//panear sitio
+//longitud y latidud
+let lon = -5.6704;
+let lat = 40.9726;
 
 searchBtn.addEventListener('click', (event) => {
     event.preventDefault();
-
-    const city = inputSearch.value
+    
+    const city = inputSearch.value;
 
     baseUrl.searchParams.set('key', apiKey);
     baseUrl.searchParams.set('city', city)
@@ -48,6 +49,9 @@ searchBtn.addEventListener('click', (event) => {
     })
     .then( data => {
         let result = data.data[0]
+        //panear sitio
+        map.panTo([result.lon, result.lat], {duration: 3500});
+        
         temperature.textContent = `${result.temp}c`
         temperature.style.fontSize = '40px'
         temperature.style.fontWeight = 'bold'
@@ -64,7 +68,6 @@ searchBtn.addEventListener('click', (event) => {
         return [result.temp, result.city_name, resultIcon.src]
     })
     .then ( savedResults => {
-        console.log(savedResults)
         let savedTempIcon = document.createElement('img')
         let savedTemp = document.createElement('p')
         let savedCity = document.createElement('p')
@@ -98,14 +101,11 @@ searchBtn.addEventListener('click', (event) => {
 
 //mapa
 mapboxgl.accessToken = 'pk.eyJ1IjoibGVvbmNhbjEyMiIsImEiOiJja250NDVubm8yajJwMm5wcjIyNXc1Yjl2In0.5IuZ1DxL3JD8IfDAs5Jrjw';
-//longitud y latidud
-let long = -5.6704;
-let lat = 40.9726;
 
 var map = new mapboxgl.Map({
     container: 'map', // container ID
     style: 'mapbox://styles/mapbox/streets-v11', // style URL
-    center: [long, lat], // starting position [lng, lat]
+    center: [lon, lat], // starting position [lng, lat]
     zoom: 4 // starting zoom
 });
 //creando marcador en el mapa
@@ -122,11 +122,13 @@ map.on('click', (e) => {
     baseUrl.searchParams.set('key', apiKey);
     baseUrl.searchParams.set('lon', e.lngLat.lng)
     baseUrl.searchParams.set('lat', e.lngLat.lat)
-    
+      
+    map.panTo([e.lngLat.lng, e.lngLat.lat], {duration: 1000});
     
 })
+
 markerBtn.addEventListener('click', () => {
-    
+    map.zoomIn({duration: 1000});
     get(baseUrl)
     .then(response => response.json())
     .then( data => {
