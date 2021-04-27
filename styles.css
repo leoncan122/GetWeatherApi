@@ -13,6 +13,15 @@ body > div {
     flex-direction: row;
     justify-content: space-around;
 }
+.form {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: center;
+}
+#menu {
+    width: 205px;
+}
 .actual-result {
     display: flex;
     flex-direction: row;
@@ -63,6 +72,10 @@ body > div {
     flex-direction: row;
     justify-content: space-around;
     align-items: center;
+}
+#map {
+    border: 2px solid red;
+    box-shadow: 59px -18px 18px #2a80c7cc;
 }
 .map-controls {
     width: 100px;

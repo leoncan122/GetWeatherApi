@@ -1,9 +1,12 @@
 //buttons
 const searchBtn = document.getElementById('searchBtn');
-const markerBtn = document.getElementById('marker');
+const seeWeather = document.getElementById('marker');
+
 //input
 const inputSearch = document.getElementById('search');
 const inputMap = document.getElementById('map');
+const countryName = document.getElementById('menu');
+let country;
 
 //contenido
 var resultIcon = document.getElementById('temp-icon')
@@ -15,6 +18,7 @@ var resultField = document.querySelector('.actual-result');
 //imprimiendo resultados
 var temperature = document.getElementById('temp')
 var cityName = document.getElementById('city-name')
+
 var feelsLike = document.getElementById('feels-like')
 var date = document.getElementById('date')
 var sunset = document.getElementById('sunset')
@@ -37,13 +41,17 @@ let lat = 40.9726;
 
 searchBtn.addEventListener('click', (event) => {
     event.preventDefault();
+    country = countryName.value
+    var city = inputSearch.value;
     
-    const city = inputSearch.value;
-
+    baseUrl.searchParams.delete('lat')
+    baseUrl.searchParams.delete('lon')
     baseUrl.searchParams.set('key', apiKey);
-    baseUrl.searchParams.set('city', city)
-
+    baseUrl.searchParams.set('city', city);
+    baseUrl.searchParams.set('country', country);
+    console.log(baseUrl)
     get(baseUrl)
+
     .then(response => {
         return response.json()
     })
@@ -57,7 +65,7 @@ searchBtn.addEventListener('click', (event) => {
         temperature.style.fontWeight = 'bold'
         cityName.textContent = result.city_name
         feelsLike.textContent = `Feels like: ${result.app_temp}`
-        date.textContent = result.datetime
+        date.textContent = result.ob_time
         sunset.textContent = `Sunset at: ${result.sunset}`
         humidity.textContent = `Humidity: ${result.rh}`
         description.textContent = result.weather.description
@@ -127,7 +135,7 @@ map.on('click', (e) => {
     
 })
 
-markerBtn.addEventListener('click', () => {
+seeWeather.addEventListener('click', () => {
     map.zoomIn({duration: 1000});
     get(baseUrl)
     .then(response => response.json())
@@ -138,7 +146,7 @@ markerBtn.addEventListener('click', () => {
         temperature.style.fontWeight = 'bold'
         cityName.textContent = result.city_name
         feelsLike.textContent = `Feels like: ${result.app_temp}`
-        date.textContent = result.datetime
+        date.textContent = result.ob_time
         sunset.textContent = `Sunset at: ${result.sunset}`
         humidity.textContent = `Humidity: ${result.rh}`
         description.textContent = result.weather.description
