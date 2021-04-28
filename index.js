@@ -5,8 +5,8 @@ const seeWeather = document.getElementById('marker');
 //input
 const inputSearch = document.getElementById('search');
 const inputMap = document.getElementById('map');
-const countryName = document.getElementById('menu');
-let country;
+var countryName = document.getElementById("menu");
+
 
 //contenido
 var resultIcon = document.getElementById('temp-icon')
@@ -29,6 +29,8 @@ var description = document.getElementById('description')
 function get(url) {
     return fetch(url);
 }
+
+
 //key
 const apiKey = "4fa351655b4244afa0ede32f61fa9e0c";
 //baseURL
@@ -39,16 +41,17 @@ const baseUrl = new URL (`v2.0/current`, basePath);
 let lon = -5.6704;
 let lat = 40.9726;
 
+// busqueda por input
 searchBtn.addEventListener('click', (event) => {
     event.preventDefault();
-    country = countryName.value
+    var selectedCountry = countryName.options[countryName.selectedIndex].id;
     var city = inputSearch.value;
     
     baseUrl.searchParams.delete('lat')
     baseUrl.searchParams.delete('lon')
     baseUrl.searchParams.set('key', apiKey);
     baseUrl.searchParams.set('city', city);
-    baseUrl.searchParams.set('country', country);
+    baseUrl.searchParams.set('country', selectedCountry);
     console.log(baseUrl)
     get(baseUrl)
 
@@ -61,8 +64,7 @@ searchBtn.addEventListener('click', (event) => {
         map.panTo([result.lon, result.lat], {duration: 3500});
         
         temperature.textContent = `${result.temp}c`
-        temperature.style.fontSize = '40px'
-        temperature.style.fontWeight = 'bold'
+        temperature.style.fontSize = '30px'
         cityName.textContent = result.city_name
         feelsLike.textContent = `Feels like: ${result.app_temp}`
         date.textContent = result.ob_time
@@ -73,6 +75,7 @@ searchBtn.addEventListener('click', (event) => {
         let icon = result.weather.icon
         resultIcon.src = `https://www.weatherbit.io/static/img/icons/${icon}.png`
         
+
         return [result.temp, result.city_name, resultIcon.src]
     })
     .then ( savedResults => {
@@ -102,11 +105,21 @@ searchBtn.addEventListener('click', (event) => {
         savedTempIcon.style.width = '35px'
         savedTemp.textContent = savedResults[0]
         savedCity.textContent = savedResults[1]
-        
 
+        pResults.addEventListener('mouseover', function() {
+            pResults.style.boxShadow = '3px 3px #53a7ea'
+            pResults.style.webkitTransform = 'translateX(-3px)'
+            pResults.style.transform = 'translateX(-3px)'
+        }) 
+        pResults.addEventListener('mouseout', () => {
+            pResults.style.boxShadow = 'none'
+            pResults.style.webkitTransform = 'none'
+            pResults.style.transform = 'none'
+        })
     })
 })
 
+//busqueda por el mapa
 //mapa
 mapboxgl.accessToken = 'pk.eyJ1IjoibGVvbmNhbjEyMiIsImEiOiJja250NDVubm8yajJwMm5wcjIyNXc1Yjl2In0.5IuZ1DxL3JD8IfDAs5Jrjw';
 
@@ -142,8 +155,7 @@ seeWeather.addEventListener('click', () => {
     .then( data => {
         let result = data.data[0]
         temperature.textContent = `${result.temp}c`
-        temperature.style.fontSize = '40px'
-        temperature.style.fontWeight = 'bold'
+        temperature.style.fontSize = '30px'
         cityName.textContent = result.city_name
         feelsLike.textContent = `Feels like: ${result.app_temp}`
         date.textContent = result.ob_time
@@ -174,7 +186,7 @@ seeWeather.addEventListener('click', () => {
         let height = 20
         pResults.style.height = `${height}%`
         pResults.style.width = `${width}%`
-
+        
         savedTemp.style.margin = '0'
         savedCity.style.margin = '0'
 
@@ -182,6 +194,17 @@ seeWeather.addEventListener('click', () => {
         savedTempIcon.style.width = '35px'
         savedTemp.textContent = savedResults[0]
         savedCity.textContent = savedResults[1]
-        
+
+        pResults.addEventListener('mouseover', function() {
+            pResults.style.boxShadow = '3px 3px #53a7ea'
+            pResults.style.webkitTransform = 'translateX(-3px)'
+            pResults.style.transform = 'translateX(-3px)'
+        }) 
+        pResults.addEventListener('mouseout', () => {
+            pResults.style.boxShadow = 'none'
+            pResults.style.webkitTransform = 'none'
+            pResults.style.transform = 'none'
+        })
+
     })
 })
